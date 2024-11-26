@@ -49,8 +49,19 @@ def game_over(screen: pg.Surface) -> None:
 
     pg.display.update()
     time.sleep(5)
-    
 
+
+def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
+    """
+    爆弾の画像リストと加速度リストの作成
+    """
+    bb_img_size = []
+    accs = [a for a in range(1, 11)]
+    for r in range(1, 11):
+        bb_img = pg.Surface((20*r, 20*r))
+        pg.draw.circle(bb_img, (255, 0, 0), (10*r, 10*r), 10*r)
+        bb_img_size.append(bb_img)
+    return bb_img_size, accs
 
 
 def main():
@@ -76,7 +87,6 @@ def main():
         if kk_rct.colliderect(bb_rct):
             game_over(screen)
             return
-
         screen.blit(bg_img, [0, 0]) 
 
 
@@ -91,7 +101,13 @@ def main():
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_img, kk_rct)
-        bb_rct.move_ip(vx, vy)
+        #爆弾の加速、拡大
+        bb_imgs, bb_accs = init_bb_imgs()
+        avx = vx*bb_accs[min(tmr//500, 9)]
+        avy = vy*bb_accs[min(tmr//500, 9)]
+        bb_img = bb_imgs[min(tmr//500, 9)]
+        bb_img.set_colorkey((0, 0, 0)) 
+        bb_rct.move_ip(avx, avy)
         #爆弾が画面外なら、元の場所に戻す
         yoko, tate = check_bound(bb_rct)
         if not yoko: #横にはみ出てたら

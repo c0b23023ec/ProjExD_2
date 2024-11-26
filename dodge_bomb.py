@@ -1,8 +1,8 @@
 import os
+import pygame as pg
+import random
 import sys
 import time
-import random
-import pygame as pg
 
 
 WIDTH, HEIGHT = 1100, 650
@@ -29,8 +29,12 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     return yoko, tate
 
 
-
 def game_over(screen: pg.Surface) -> None:
+    """
+    こうかとんと爆弾が接触したらGameOverを表示
+    引数 : スクリーンSurface
+    戻り値 : なし
+    """
     screen_black = pg.Surface((WIDTH, HEIGHT))
     pg.draw.rect(screen_black, (0, 0, 0), (0, 0, WIDTH, HEIGHT))
     screen_black.set_alpha(128)
@@ -53,15 +57,21 @@ def game_over(screen: pg.Surface) -> None:
 
 def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
     """
-    爆弾の画像リストと加速度リストの作成
+    爆弾の拡大リストと加速度リストの作成
+    引数 : なし
+    戻り値 : 10段階の爆弾サイズのリストと、10段階の加速度リスト
     """
     bb_img_size = []
-    accs = [a for a in range(1, 11)]
+    accs = [a for a in range(1, 11)] #10段階の加速度リスト
     for r in range(1, 11):
         bb_img = pg.Surface((20*r, 20*r))
         pg.draw.circle(bb_img, (255, 0, 0), (10*r, 10*r), 10*r)
+    #拡大した爆弾のサイズをリストに
         bb_img_size.append(bb_img)
     return bb_img_size, accs
+
+
+def
 
 
 def main():
@@ -89,7 +99,6 @@ def main():
             return
         screen.blit(bg_img, [0, 0]) 
 
-
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
         for key ,tpl in DELTA.items():
@@ -106,7 +115,7 @@ def main():
         avx = vx*bb_accs[min(tmr//500, 9)]
         avy = vy*bb_accs[min(tmr//500, 9)]
         bb_img = bb_imgs[min(tmr//500, 9)]
-        bb_img.set_colorkey((0, 0, 0)) 
+        bb_img.set_colorkey((0, 0, 0))
         bb_rct.move_ip(avx, avy)
         #爆弾が画面外なら、元の場所に戻す
         yoko, tate = check_bound(bb_rct)

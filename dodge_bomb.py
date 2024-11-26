@@ -71,9 +71,6 @@ def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
     return bb_img_size, accs
 
 
-def
-
-
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
